@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        nav {
+            background-color: #444;
+            padding: 20px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            margin: 0 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+
+<nav>
+    <a th:href="@{'/'}">Home</a>
+    <a th:href="@{'/sign-in'}">Sign in</a>
+    <a th:href="@{'/sign-up'}">Sign up</a>
+</nav>
+
+<section>
+    <h2>Proforma!</h2>
+    <p>Explore seamless data entry with our Form to Table website. </p>
+    <p> Input your details effortlessly through our user-friendly form, and watch as the information is instantly organized and displayed in a clean table format below. Simplify your data sharing experience with us!</p>
+</section>
+
+<footer>
+    &copy; 2024 Proforma. All rights reserved.
+</footer>
+</body>
+</html>
