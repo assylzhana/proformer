@@ -35,9 +35,9 @@ public class DataController {
         dataService.addData(data);
     }
 
-    @PutMapping("/{id}")
-    public void edit(@PathVariable Long id) {
-        dataService.editData(id);
+    @PutMapping()
+    public void edit(@RequestBody Data data) {
+        dataService.editData(data);
     }
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){

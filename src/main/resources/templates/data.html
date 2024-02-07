@@ -143,7 +143,7 @@
 
                     <div   class="mb-3">
                         <label class="form-label">Categories</label>
-                        <select th:value="${d.category.name}" class="form-select" id="categories_for_edit" aria-label="Default select example">
+                        <select  class="form-select" id="categories_for_edit" aria-label="Default select example">
                             <div th:each="c : ${categories}">
                                 <option th:text="${c.name}" th:value="${c.id}"> </option>
                             </div>
@@ -153,8 +153,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" onclick="editData()">Save</button>
                 </div>
+
             </div>
         </div>
     </div>
@@ -212,6 +213,8 @@
         reader.readAsArrayBuffer(fileInput);
     }
 
+
+
     function loadData() {
         let html = "";
         let req = new XMLHttpRequest();
@@ -228,13 +231,72 @@
                 html += "<td><a href='#' onclick='downloadFile(\"" + list[i].fileName + "\", \"" + list[i].fileContent + "\")'>" + list[i].fileName + "</a></td>";
                 html += "<td>" + list[i].date + "</td>";
                 html += "<td>" + list[i].time + "</td>";
-                html += "<td><button class=\"btn btn-success\" data-bs-toggle=\"modal\" data-bs-target=\"#exampleModal\" onclick=\"editData(" + list[i].id + ")\")\">Edit</button></td>";
+                html += "<td><button class=\"btn btn-success\"  data-bs-toggle=\"modal\" data-bs-target=\"#exampleModal\" onclick=\"setEditData(" + list[i].id + ")\">Edit</button></td>";
                 html += "<td><button class=\"btn btn-danger\" onclick=\"deleteData(" + list[i].id + ")\">Delete</button></td>";
                 html += "</tr>";
+
             }
             document.getElementById('Data').innerHTML = html;
         };
     }
+    function editData() {
+        let newName = document.getElementById('name_for_edit').value;
+        let description = document.getElementById('description_for_edit').value;
+        let fileInput = document.getElementById('fileContent_for_edit').files[0];
+        let date = document.getElementById('date_for_edit').value;
+        let time = document.getElementById('time_for_edit').value;
+        let categorySelect = document.getElementById('categories_for_edit');
+
+        if (newName.trim() === "") {
+            alert("Please fill out everything");
+            return;
+        }
+
+        let reader = new FileReader();
+        reader.onload = function (event) {
+            let fileContent = event.target.result;
+            let fileName = fileInput.name;
+
+            let editedData = {
+                "id": selectedDataId,
+                "name": newName,
+                "description": description,
+                "fileContent": Array.from(new Uint8Array(fileContent)),
+                "fileName": fileName,
+                "date": date,
+                "time": time,
+                "category": {
+                    "id": categorySelect.value,
+                    "name": categorySelect.options[categorySelect.selectedIndex].text
+                }
+            };
+
+
+            let req = new XMLHttpRequest();
+            req.open("PUT", "/table");
+            req.setRequestHeader("Content-type", "application/json");
+            req.send(JSON.stringify(editedData));
+            req.onload = function () {
+                loadData();
+                $('#exampleModal').modal('hide');
+                document.getElementById('name_for_edit').value = "";
+                document.getElementById('description_for_edit').value = "";
+                document.getElementById('fileContent_for_edit').value = "";
+                document.getElementById('date_for_edit').value = "";
+                document.getElementById('time_for_edit').value = "";
+                document.getElementById('categories_for_edit').value = "";
+
+
+            };
+        };
+        reader.readAsArrayBuffer(fileInput);
+    }
+
+    function setEditData(Id) {
+        selectedDataId = Id;
+    }
+
+
 
     function downloadFile(fileName, fileContent) {
         const blob = b64toBlob(fileContent, 'application/octet-stream');
