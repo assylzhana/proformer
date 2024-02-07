@@ -1,6 +1,5 @@
 package proforma.com.proforma.models;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,8 +27,9 @@ public class Data {
     @Basic(fetch = FetchType.LAZY)
     private byte[] fileContent;
 
-    private LocalDate date;
+    private String fileName;
 
+    private LocalDate date;
     private LocalTime time;
 
     @ManyToOne

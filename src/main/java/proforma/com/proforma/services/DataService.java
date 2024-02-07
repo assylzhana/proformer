@@ -8,6 +8,8 @@ import proforma.com.proforma.models.Data;
 import proforma.com.proforma.repositories.DataRepository;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -16,7 +18,9 @@ public class DataService {
     private DataRepository dataRepository;
 
     public List<Data> getAllData() {
-        return dataRepository.findAll();
+        List<Data> list = dataRepository.findAll();
+        Collections.sort(list,Comparator.comparing(Data::getId));
+        return list;
     }
 
     public void editData(Data data) {
@@ -32,4 +36,9 @@ public class DataService {
     }
 
 
+    public void editData(Long id) {
+        Data data = dataRepository.findById(id).orElse(null);
+        dataRepository.save(data);
+
+    }
 }

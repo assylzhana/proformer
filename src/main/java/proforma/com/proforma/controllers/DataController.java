@@ -3,6 +3,7 @@ package proforma.com.proforma.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,16 +29,15 @@ public class DataController {
     }
 
 
-    //@PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE},produces = {MediaType.APPLICATION_JSON_VALUE})
     @PostMapping
     public void addData( @RequestBody Data data) {
+
         dataService.addData(data);
     }
 
-
-    @PutMapping()
-    public void edit(@RequestBody Data data) {
-        dataService.editData(data);
+    @PutMapping("/{id}")
+    public void edit(@PathVariable Long id) {
+        dataService.editData(id);
     }
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){
