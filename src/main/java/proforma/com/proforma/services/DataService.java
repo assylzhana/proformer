@@ -41,4 +41,8 @@ public class DataService {
         dataRepository.save(data);
 
     }
+
+    public Data getDataById(Long id) {
+        return dataRepository.findById(id).orElse(null);
+    }
 }

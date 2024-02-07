@@ -251,7 +251,10 @@
             alert("Please fill out everything");
             return;
         }
-
+        if (!newName || !description || !fileInput || !date || !time || categorySelect.selectedIndex === -1) {
+            alert("Please fill in all required fields.");
+            return;
+        }
         let reader = new FileReader();
         reader.onload = function (event) {
             let fileContent = event.target.result;
@@ -292,9 +295,30 @@
         reader.readAsArrayBuffer(fileInput);
     }
 
-    function setEditData(Id) {
-        selectedDataId = Id;
+    function setEditData(id) {
+        let req = new XMLHttpRequest();
+        req.open("GET", "/table/" + id);
+        req.send();
+        req.onload = function () {
+            let data = JSON.parse(req.responseText);
+            document.getElementById('name_for_edit').value = data.name;
+            document.getElementById('description_for_edit').value = data.description;
+            document.getElementById('fileContent_for_edit').value = data.fileContent;
+
+            document.getElementById('date_for_edit').value = data.date;
+            document.getElementById('time_for_edit').value = data.time;
+            let categorySelect = document.getElementById('categories_for_edit');
+            for (let i = 0; i < categorySelect.options.length; i++) {
+                if (categorySelect.options[i].value == data.category.id) {
+                    categorySelect.selectedIndex = i;
+                    break;
+                }
+            }
+
+            selectedDataId = id;
+        };
     }
+
 
 
 
@@ -378,11 +402,9 @@
         }
 
         if (dragSrcEl !== this) {
-            // Swap the source and target columns
             const sourceIndex = Array.from(dragSrcEl.parentNode.children).indexOf(dragSrcEl);
             const targetIndex = Array.from(this.parentNode.children).indexOf(this);
 
-            // Swap the columns in the table rows
             document.querySelectorAll('tr').forEach(row => {
                 const cells = Array.from(row.children);
                 const temp = cells[sourceIndex].innerHTML;

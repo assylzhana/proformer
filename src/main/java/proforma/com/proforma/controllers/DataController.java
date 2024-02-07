@@ -28,7 +28,10 @@ public class DataController {
         return dataService.getAllData();
     }
 
-
+    @GetMapping("/{id}")
+    public Data getData(@PathVariable Long id){
+        return dataService.getDataById(id);
+    }
     @PostMapping
     public void addData( @RequestBody Data data) {
 
